@@ -35,7 +35,7 @@ package
 		
 		private function init(e:Event):void
 		{
-			MillBotApp app = new MillBotApp(stage);
+			var app:MillBotApp = new MillBotApp(stage);
 			app.start();
 		}
 		
