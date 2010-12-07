@@ -16,7 +16,6 @@ package
 		
 		public function Main():void 
 		{
-			
 			addEventListener(Event.ADDED_TO_STAGE, init);
 			
 			/*
@@ -35,6 +34,7 @@ package
 		
 		private function init(e:Event):void
 		{
+			stage.nativeWindow.title = "MillBot AIR [ALPHA]";
 			var app:MillBotApp = new MillBotApp(stage);
 			app.start();
 		}

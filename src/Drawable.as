@@ -5,7 +5,7 @@ package
 	 * ...
 	 * @author Jon Morton
 	 */
-	public interface Drawable extends Sprite
+	public class Drawable extends Sprite
 	{
 		
 		public function Drawable() 
@@ -13,7 +13,7 @@ package
 			
 		}
 		
-		public function redraw()
+		public function redraw():void
 		{
 			
 		}
