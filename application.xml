@@ -7,7 +7,7 @@
 	
 	<name>MillBot</name> 
 	<description></description> 
-	<copyright></copyright> 
+	<copyright>2010</copyright> 
 	
 	<initialWindow> 
 		<title>MillBot</title> 
@@ -17,7 +17,7 @@
 		<visible>true</visible> 
 		<minimizable>true</minimizable> 
 		<maximizable>true</maximizable> 
-		<resizable>true</resizable> 
+		<resizable>false</resizable> 
 	</initialWindow> 
 	
 	<!-- 

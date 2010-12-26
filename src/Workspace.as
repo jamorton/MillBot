@@ -1,10 +1,14 @@
 package  
 {
+	import element.Element;
 	import flash.display.Stage;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import flash.text.engine.ElementFormat;
 	import tool.ITool;
-	import tool.Rectangle;
+	import tool.PointerTool;
+	import tool.RectangleTool;
 
 	public class Workspace extends Drawable
 	{
@@ -20,13 +24,14 @@ package
 		public static const SIZE_PIXELS_X:Number = 500;
 		public static const SIZE_PIXELS_Y:Number = 500;
 		
-		private static const TOOLS:Vector.<ITool> = <ITool>[
-			new Rectangle()
+		private static var TOOLS:Vector.<ITool> = new <ITool>[
+				new PointerTool(),
+				new RectangleTool()
 		];
-
+		
 		private var _grid:Grid;
 		private var _currentTool:int;
-		
+		private var _elements:Vector.<Element>;
 		public function Workspace()
 		{
 			if (TOOLS.length == 0)
@@ -34,25 +39,54 @@ package
 			
 			_grid  = new Grid();
 			_currentTool = 0;
+			_elements = new Vector.<Element>();
 			addEventListener(MouseEvent.MOUSE_DOWN, evtMouseDown);
 			addEventListener(MouseEvent.MOUSE_UP,   evtMouseUp);
 			addEventListener(MouseEvent.MOUSE_MOVE, evtMouseMove);
-			redraw();
+			addEventListener(MouseEvent.CLICK,      evtMouseClick);
+			MillBotApp.instance.stage.addEventListener(KeyboardEvent.KEY_DOWN, evtKeyDown);
 		}
 		
-		private function evtMouseDown(e:MouseEvent):void
+		public function addElement(e:Element):void
 		{
-			TOOLS[_currentTool].mouseDown(e);
+			_elements.push(e);
+			addChild(e);
 		}
+		
+		public function getElementsAt(v:Vector2):Vector.<Element>
+		{
+			var elements:Vector.<Element> = new Vector.<Element>();
+			var objs:Array = getObjectsUnderPoint(localToGlobal(v.toPoint()));
+			for each (var obj:Object in objs)
+			{
+				if (obj is Element)
+					elements.push(obj as Element);
+			}
+			return elements;
+		}
+		
+		private function evtMouseClick(e:MouseEvent):void
+		{ TOOLS[_currentTool].mouseClick(new Vector2(mouseX, mouseY)); }
+	
+		private function evtMouseDown(e:MouseEvent):void
+		{ TOOLS[_currentTool].mouseDown(new Vector2(mouseX, mouseY)); }
 		
 		private function evtMouseUp(e:MouseEvent):void
-		{
-			TOOLS[_currentTool].mouseUp(e);
-		}
+		{ TOOLS[_currentTool].mouseUp(new Vector2(mouseX, mouseY)); }
 		
 		private function evtMouseMove(e:MouseEvent):void
+		{ TOOLS[_currentTool].mouseMove(new Vector2(mouseX, mouseY)); }
+		
+		private function evtKeyDown(e:KeyboardEvent):void
 		{
-			TOOLS[_currentTool].mouseMove(e);
+			if (e.charCode >= 49 && e.charCode <= 57)
+			{
+				var num:uint = e.charCode - 49;
+				trace(num);
+				if (TOOLS.length > num)
+					_currentTool = num;
+				return;
+			}
 		}
 		
 		public override function redraw():void
@@ -63,6 +97,9 @@ package
 			graphics.drawRect(0, 0, SIZE_PIXELS_X, SIZE_PIXELS_Y);
 			graphics.endFill();
 			addChild(_grid);
+			
+			for each (var t:ITool in TOOLS)
+				t.initialize();
 		}
 		
 		public static function ITP(v:Vector2):Vector2
@@ -81,7 +118,9 @@ package
 			);
 		}
 		
-		public function get currentTool():Class { return _currentTool; }
+		public function get currentTool():ITool { return TOOLS[_currentTool]; }
+		
+		public function get grid():Grid { return _grid; }
 		
 	}
 

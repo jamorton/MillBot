@@ -8,14 +8,9 @@ package
 	public class Drawable extends Sprite
 	{
 		
-		public function Drawable() 
-		{
-			
-		}
-		
 		public function redraw():void
 		{
-			
+			clear();
 		}
 		
 		public function clear():void

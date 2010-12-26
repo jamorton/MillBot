@@ -1,6 +1,8 @@
 package  
 {
 	import flash.display.Stage;
+	import flash.display.StageScaleMode;
+	import flash.events.Event;
 
 	public class MillBotApp
 	{
@@ -15,6 +17,8 @@ package
 			_instance = this;
 			_stage = stage;
 			_workspace = new Workspace();
+			_stage.scaleMode = StageScaleMode.NO_SCALE;
+			//_stage.addEventListener(Event.RESIZE
 		}
 		
 		public static function get instance():MillBotApp
@@ -26,12 +30,15 @@ package
 		
 		public function start():void
 		{
+			_workspace.redraw();
 			_stage.addChild(_workspace);
 			_workspace.x = (_stage.stageWidth  - Workspace.SIZE_PIXELS_X) / 2;
 			_workspace.y = (_stage.stageHeight - Workspace.SIZE_PIXELS_Y) / 2;
 		}
 		
 		public function get workspace():Workspace { return _workspace; }
+		
+		public function get stage():Stage { return _stage; }
 	}
 
 }

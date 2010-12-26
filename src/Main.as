@@ -7,14 +7,10 @@ package
 	import flash.desktop.Updater;
 	import flash.events.Event;
 	
-	/**
-	 * ...
-	 * @author Jonanin
-	 */
 	public class Main extends Sprite 
 	{
 		
-		public function Main():void 
+		public function Main() 
 		{
 			addEventListener(Event.ADDED_TO_STAGE, init);
 			
